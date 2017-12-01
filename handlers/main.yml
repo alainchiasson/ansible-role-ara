@@ -17,7 +17,8 @@
   service:
    name: "{{ apache_service }}"
    state: "restarted"
-   enabled: yes
+   enabled: "yes"
 
 - name: Reload systemctl
-  command: systemctl daemon-reload
+  systemd:
+   daemon_reload: "yes"

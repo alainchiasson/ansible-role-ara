@@ -26,8 +26,8 @@
   with_items: "{{ required_packages }}"
 
 - name: Install pip
-  easy_install: 
-    name: pip 
+  easy_install:
+    name: pip
     state: present
 
 - name: Install ARA with pip
@@ -50,7 +50,7 @@
     - name: Set selinux boolean to allow Apache to manage the files
       seboolean:
         name: httpd_unified
-        state: yes
+        state: "yes"
       when:
         - ansible_os_family == "RedHat"
         - selinux_status.stdout == "Enforcing"
@@ -65,13 +65,13 @@
         owner: "{{ apache_user }}"
         group: "{{ apache_group }}"
         state: directory
-        recurse: yes
+        recurse: "yes"
 
     - name: Create default configuration file if one does not exist
       template:
         src: templates/ansible.cfg.j2
         dest: "{{ ara_config_path }}/ansible.cfg"
-        force: no
+        force: "no"
 
     - name: Copy ARA's WSGI script to the config path
       shell: cp -p $(which ara-wsgi) {{ ara_config_path }}
@@ -84,13 +84,13 @@
         group: root
         mode: 0644
       notify:
-        - Restart Apache
+        - Restart apache
 
     - name: Ensure the configuration is enabled
       command: a2ensite ara
       when: ansible_os_family == "Debian"
       notify:
-       - Restart Apache
+        - Restart apache
 
     - name: Flush handlers
       meta: flush_handlers
@@ -98,7 +98,7 @@
     - name: Ensure apache is enabled
       service:
         name: "{{ apache_service }}"
-        enabled: yes
+        enabled: "yes"
   when: mod_wsgi | bool
 
 - block:
@@ -110,13 +110,13 @@
       file:
         path: "{{ ara_config_path }}"
         state: directory
-        recurse: yes
+        recurse: "yes"
 
     - name: Create default configuration file if one does not exist
       template:
         src: templates/ansible.cfg.j2
         dest: "{{ ara_config_path }}/ansible.cfg"
-        force: no
+        force: "no"
 
     - name: Get the location of ara-manage
       command: which ara-manage
@@ -140,7 +140,7 @@
       service:
         name: ara
         state: started
-        enabled: yes
+        enabled: "yes"
   when: embedded_server | bool
 
 - name: Get ARA's installed location

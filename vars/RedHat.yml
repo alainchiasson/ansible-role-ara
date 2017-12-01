@@ -23,6 +23,7 @@ required_packages:
   - python-devel
   - python-setuptools
   - redhat-rpm-config
+  - libsemanage-python
   - which
 
 required_wsgi_packages:
